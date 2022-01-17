@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "karma-ipys",
+  "private_key_id": "99a0d048a23a518fdbbc7462f5ffdef7e823afc8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDu2SgQkpKfYgW8\n+0v1RkmSme9hXBamiypGWoKKNJEbCHvRYoWBhl+YNblegBv3lX8XJ96R15MBuusD\nv/jWSIAmXAS9QJkfVLg2P9MG+FNzUluY68PTjKmRzK/LsCxooAHUX69XmUGY8XQe\ni3EXd793u/0eKlZtojRW9nFQm/RkyzqPxrfDGi2E+GKoyZhAVyqLHwSWxWQKkQY3\nnoxfeFoBFLa4UC+FRCbwHjTkdNsjpGKTSTXPGc6jwkaEd9icA+8kouPl+IQuFCe+\npPWuqIoO6vFWvYc9CN9OHPl9t2KFvMg8mVxk/8x5IHzB64x8VvG4lDLcksXAWu0f\nNGtmU5DtAgMBAAECggEAIL0FP9hHXq9Z6ABt9e2vcffFlwu/Uw6qOcB4OidgaFsu\nVZHyiMF5YuyiPvDCZJpKNEtTt5vb25XaVsY+fmiroBZm0+YB1wiOw2jWLRNmpNz6\nDyjpy5pxN7ndssawH5snBQwkhZZNJoCaEQG9+6B/TxMma7cT560fDXh0Kb9mrVXm\nHBG8h/wSnKp9RtEeKZ/KkqDA/BPVHVCcHb9aBuGm9ybVtP6h+P9hAs1P6PNRHoTY\nCu3/BOwdJrb3oqckcMMoAzeSpnXVQK75o7yVAymrfFd7MrztI5XAqGB8W1B3y1/C\n85xA6nkpc184dQ8zH3exLzZcVb3QJmCcK7kTiSnJpQKBgQD/Avn7Bd1PeGhNOp70\ngMfw1OaM+B5cMgy4gOofjRM5SPSrE45vmOuRGAyIe2sjfwzuPJl0I2VylE6IAw7d\nSjEKdX2w41PoUoQUX1v2B1O8SJ1469mKYUR2O9EhZEcJgJMtH1WZYPB3EyguILhi\nRA2cdCdyZ76wsfEkrIslhouuJwKBgQDvxiSF+TWcn94VysZTiHHzvJD+cytXuOQ+\ntqJrrN84AgbiskipVapnVGXWS5fAMnUDNPjT2t2JmwE6Zfj7GCegBWvg9n0s5i+o\nJDOwaD7Bk7gYdSV68uHmNCXrp6Z2fewgOBquRuLZlit+ssO7Qc9mHMvy7IRY4HPM\nfDN7ca7IywKBgFFNA6GyJvKVMrucetz8ycHQPoim+hbupfuUrg/NDFnxFoAMRhby\nK/ggMK66mlfAw8CYdVv/hPJYsgjO4MhQRP5OovnoH/IrjIxqMolnoJygkgPhPYPO\nquL/AxegPr2azlFOch3qN//ejarXJ7G8fJJqvcDNro/qyzSkBeC62oF1AoGBAKH0\nmXjw8th/V3gqxjloIWg8B0gHrNAM8Aa4QA8w7nmbTOFVASV32qj+5eaQmsjUjBsF\nbclTvW4UCAlVFY8tKp646rxCYhywwqH1CgDu+OyyBZhnkFByvElNEgwR6quAtLyy\niLsM4G+OMoTa5MCYXCmh69SDE4Yg3bbSccfA6wlvAoGBANSnSuCNNy310yy2/vhC\noDSvCZZTwINGnT2ai9UKqgDWMTJ1mSik2V91pUfMKwX3j3lCwMxxadYMVBhnYY1D\nMbrgfQRf9IYMjeApvguoib9TJ2aQS0rKJjj6bJW6LIT0Yx2oDSu8qXQKaF4rKbkq\nF1uChqHm8karQ1hKM6H+bgi+\n-----END PRIVATE KEY-----\n",
+  "client_email": "taxonetime@karma-ipys.iam.gserviceaccount.com",
+  "client_id": "118007590728570039290",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/taxonetime%40karma-ipys.iam.gserviceaccount.com"
+}

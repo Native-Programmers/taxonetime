@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TaxOneTime</string>
+    <string name="facebook_app_id">627098088347911</string>
+    <string name="fb_login_protocol_scheme">fb627098088347911</string>
+    <string name="facebook_client_token">2d59ac36138fdeafc47c4634abda1c68</string>
+</resources>

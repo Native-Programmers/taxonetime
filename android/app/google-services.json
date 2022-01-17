@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "569930552842",
+    "project_id": "t-o-t-5ec61",
+    "storage_bucket": "t-o-t-5ec61.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569930552842:android:6d0683807b365af1d431f3",
+        "android_client_info": {
+          "package_name": "com.nativeprogrammers.taxonetime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569930552842-uume9sh2708qfug89vm8kp37oug45313.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nativeprogrammers.taxonetime",
+            "certificate_hash": "9de928f3133ad6805a6c41dcbd4d1f30be58efc6"
+          }
+        },
+        {
+          "client_id": "569930552842-bsbbbkal5p46i0sg9g993h2kt72beh1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy-moeLEBD05VTW4foGfAnAhnN14SwMAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569930552842-bsbbbkal5p46i0sg9g993h2kt72beh1s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
