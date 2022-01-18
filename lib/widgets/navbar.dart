@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:taxonetime/screens/home/home.dart';
+import 'package:taxonetime/screens/news/news.dart';
 import 'package:taxonetime/screens/settings/settings.dart';
 
 PersistentTabController _controller = PersistentTabController(initialIndex: 0);
@@ -12,7 +13,7 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> _buildScreens() {
-      return [const Home(), const Settings()];
+      return [const Home(), const NewsPage(), const Settings()];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -20,6 +21,12 @@ class BottomNavBar extends StatelessWidget {
         PersistentBottomNavBarItem(
           icon: const Icon(CupertinoIcons.home),
           title: ("Home"),
+          activeColorPrimary: CupertinoColors.activeBlue,
+          inactiveColorPrimary: CupertinoColors.systemGrey,
+        ),
+        PersistentBottomNavBarItem(
+          icon: const Icon(CupertinoIcons.news),
+          title: ("News"),
           activeColorPrimary: CupertinoColors.activeBlue,
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),
