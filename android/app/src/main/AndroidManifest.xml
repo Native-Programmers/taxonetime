@@ -27,7 +27,7 @@
   </intent>
 </queries>
    <application
-        android:label="taxonetime"
+        android:label="Taxonetime"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic = "true"

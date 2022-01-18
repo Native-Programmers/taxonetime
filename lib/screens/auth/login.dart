@@ -14,6 +14,9 @@ const url = 'https://sites.google.com/view/tax-one-time';
 bool hidden = true;
 String cnic = '';
 
+TextEditingController _email = TextEditingController();
+TextEditingController _password = TextEditingController();
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -40,6 +43,9 @@ class _LoginState extends State<Login> {
   @override
   void dispose() {
     _controller.dispose();
+    _password.dispose();
+    _email.dispose();
+
     super.dispose();
   }
 
@@ -197,101 +203,110 @@ class _LoginState extends State<Login> {
         context: context,
         builder: (_) {
           bool isPasswordhidden = true;
-          TextEditingController _email = TextEditingController();
-          TextEditingController _password = TextEditingController();
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               title: const Text('New User'),
-              content: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      decoration: decorations(hint: 'Enter Email'),
-                      validator: (value) => EmailValidator.validate(value!)
-                          ? null
-                          : "Please enter a valid email",
-                      controller: _email,
-                    ),
-                    const Divider(
-                      height: 15,
-                      color: Colors.transparent,
-                    ),
+              content: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        decoration: decorations(hint: 'Enter Email'),
+                        validator: (value) => EmailValidator.validate(value!)
+                            ? null
+                            : "Please enter a valid email",
+                        controller: _email,
+                      ),
+                      const Divider(
+                        height: 15,
+                        color: Colors.transparent,
+                      ),
 
-                    const Divider(
-                      height: 15,
-                      color: Colors.transparent,
-                    ),
-                    TextFormField(
-                        obscureText: isPasswordhidden,
-                        decoration: InputDecoration(
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
+                      const Divider(
+                        height: 15,
+                        color: Colors.transparent,
+                      ),
+                      TextFormField(
+                          obscureText: isPasswordhidden,
+                          controller: _password,
+                          decoration: InputDecoration(
+                            disabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          hintText: "Please enter password",
-                          suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  isPasswordhidden = !isPasswordhidden;
-                                });
-                              },
-                              icon: isPasswordhidden
-                                  ? const FaIcon(FontAwesomeIcons.eye)
-                                  : const FaIcon(FontAwesomeIcons.solidEye)),
-                        )),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
-                    FlutterPwValidator(
-                      controller: _password,
-                      minLength: 6,
-                      specialCharCount: 1,
-                      width: 400,
-                      height: 150,
-                      onSuccess: () {},
-                    ),
-
-                    const Divider(
-                      height: 15,
-                      color: Colors.transparent,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            showDialog(
-                                context: context,
-                                builder: (_) => const AlertDialog(
-                                        content: SpinKitWave(
-                                      color: Colors.amber,
-                                    ))).then((value) =>
-                                FirebaseAuth.instance
-                                    .signInWithEmailAndPassword(
-                                        email: _email.text,
-                                        password: _password.text)
-                                    .then((value) {
-                                  Get.back();
-                                  Get.back();
-                                }).onError((error, stackTrace) {
-                                  Get.snackbar('Error', 'Unable to register');
-                                }));
-                          } else {
-                            Get.snackbar('Error', 'Please fill all the fields');
-                          }
-                        },
-                        child: const Text('REGISTER'))
-                    // TextFormField(
-                    //   decoration: decorations,
-                    //   enabled: false,
-                    // ),
-                    // TextFormField(
-                    //   decoration: decorations,
-                    //   enabled: false,
-                    // ),
-                  ],
+                            hintText: "Please enter password",
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isPasswordhidden = !isPasswordhidden;
+                                  });
+                                },
+                                icon: isPasswordhidden
+                                    ? const FaIcon(FontAwesomeIcons.eye)
+                                    : const FaIcon(FontAwesomeIcons.solidEye)),
+                          )),
+                      const Divider(
+                        color: Colors.transparent,
+                      ),
+                      FlutterPwValidator(
+                        controller: _password,
+                        minLength: 8,
+                        specialCharCount: 1,
+                        uppercaseCharCount: 1,
+                        numericCharCount: 1,
+                        width: 400,
+                        height: 150,
+                        onSuccess: () {},
+                      ),
+                      const Divider(
+                        height: 15,
+                        color: Colors.transparent,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => const AlertDialog(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: SpinKitWave(
+                                        color: Colors.amber,
+                                      ))).then((value) =>
+                                  FirebaseAuth.instance
+                                      .createUserWithEmailAndPassword(
+                                          email: _email.text,
+                                          password: _password.text)
+                                      .then((value) {
+                                    Get.back();
+                                    Get.back();
+                                    FirebaseAuth.instance.signOut();
+                                  }).onError((error, stackTrace) {
+                                    Get.back();
+                                    Get.back();
+                                    Get.snackbar(
+                                        'Error', "User already registered");
+                                  }));
+                            } else {
+                              Get.snackbar(
+                                  'Error', 'Please fill all the fields');
+                            }
+                          },
+                          child: const Text('REGISTER'))
+                      // TextFormField(
+                      //   decoration: decorations,
+                      //   enabled: false,
+                      // ),
+                      // TextFormField(
+                      //   decoration: decorations,
+                      //   enabled: false,
+                      // ),
+                    ],
+                  ),
                 ),
               ),
               actions: [
@@ -310,8 +325,6 @@ class _LoginState extends State<Login> {
     showDialog(
       context: context,
       builder: (context) {
-        TextEditingController email = TextEditingController();
-        TextEditingController password = TextEditingController();
         bool isPasswordhidden = true;
         return StatefulBuilder(
           builder: (context, setState) {
@@ -325,7 +338,7 @@ class _LoginState extends State<Login> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         TextFormField(
-                          controller: email,
+                          controller: _email,
                           validator: (value) => EmailValidator.validate(value!)
                               ? null
                               : "Please enter a valid email",
@@ -336,6 +349,7 @@ class _LoginState extends State<Login> {
                         ),
                         TextFormField(
                             obscureText: isPasswordhidden,
+                            controller: _password,
                             decoration: InputDecoration(
                               disabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -355,14 +369,6 @@ class _LoginState extends State<Login> {
                                       : const FaIcon(
                                           FontAwesomeIcons.solidEye)),
                             )),
-                        FlutterPwValidator(
-                          controller: password,
-                          minLength: 6,
-                          specialCharCount: 1,
-                          width: 400,
-                          height: 150,
-                          onSuccess: () {},
-                        ),
                         const Divider(
                           height: 15,
                           color: Colors.transparent,
@@ -373,17 +379,21 @@ class _LoginState extends State<Login> {
                               showDialog(
                                   context: context,
                                   builder: (_) => const AlertDialog(
-                                          content: SpinKitWave(
+                                      elevation: 0,
+                                      backgroundColor: Colors.transparent,
+                                      content: SpinKitWave(
                                         color: Colors.amber,
                                       ))).then((value) =>
                                   AuthController.authInstance
                                       .login(
-                                          email: email.text,
-                                          password: password.text)
+                                          email: _email.text,
+                                          password: _password.text)
                                       .then((value) {
                                     Get.back();
                                     Get.back();
                                   }).onError((error, stackTrace) {
+                                    Get.back();
+                                    Get.back();
                                     Get.snackbar('Error', 'Unable to login');
                                   }));
                             } else {
@@ -398,7 +408,7 @@ class _LoginState extends State<Login> {
                   )),
               actions: <Widget>[
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Get.back(),
                   child: const Text("Cancel"),
                 ),
               ],

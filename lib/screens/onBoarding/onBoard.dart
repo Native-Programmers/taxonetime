@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxonetime/controller/authController.dart';
+import 'package:taxonetime/screens/auth/login.dart';
 import 'package:taxonetime/screens/onBoarding/constant.dart';
 import 'package:taxonetime/screens/onBoarding/onBoardModel.dart';
 import 'package:taxonetime/screens/wrapper/wrapper.dart';
+import 'package:taxonetime/widgets/navbar.dart';
 
 import 'constant.dart';
 
@@ -30,15 +33,14 @@ class _OnBoardState extends State<OnBoard> {
       img: 'assets/images/2.jpg',
       text: "No more ametuer paper work",
       desc:
-          "All cases are handled by trained professionals. Means ",
+          "All cases are handled by trained professionals. Means no more hassle",
       bg: const Color(0xFF4756DF),
       button: Colors.white,
     ),
     OnboardModel(
       img: 'assets/images/3.jpg',
-      text: "Gunakan Fitur Kolaborasi Untuk Pengalaman Lebih",
-      desc:
-          "Tersedia fitur Kolaborasi dengan tujuan untuk mengasah skill lebih dalam karena bias belajar bersama",
+      text: "Auto Reminders",
+      desc: "To ensure people do not forget to file their statements",
       bg: Colors.white,
       button: const Color(0xFF4756DF),
     ),
@@ -60,6 +62,11 @@ class _OnBoardState extends State<OnBoard> {
     int isViewed = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('onBoard', isViewed);
+    if (AuthController.authInstance.firebaseUser == null) {
+      Get.offAll(() => const BottomNavBar());
+    } else {
+      Get.offAll(() => const Login());
+    }
   }
 
   @override
@@ -73,9 +80,7 @@ class _OnBoardState extends State<OnBoard> {
           TextButton(
             onPressed: () {
               _storeOnboardInfo();
-              Get.toEnd(() => const Wrapper());
-              // Navigator.pushReplacement(context,
-              //     MaterialPageRoute(builder: (context) => const Wrapper()));
+              Get.toEnd(() => null);
             },
             child: Text(
               "Skip",
@@ -151,11 +156,7 @@ class _OnBoardState extends State<OnBoard> {
                     onTap: () async {
                       if (index == screens.length - 1) {
                         await _storeOnboardInfo();
-                        Get.toEnd(() => const Wrapper());
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const Wrapper()));
+                        Get.toEnd(() => null);
                       }
 
                       _pageController.nextPage(
@@ -171,7 +172,7 @@ class _OnBoardState extends State<OnBoard> {
                           borderRadius: BorderRadius.circular(15.0)),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text(
-                          "Next",
+                          index == 2 ? "Continue" : "Next",
                           style: TextStyle(
                               fontSize: 16.0,
                               color: index % 2 == 0 ? kwhite : kblue),
