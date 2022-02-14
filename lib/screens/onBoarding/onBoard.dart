@@ -5,7 +5,6 @@ import 'package:taxonetime/controller/authController.dart';
 import 'package:taxonetime/screens/auth/login.dart';
 import 'package:taxonetime/screens/onBoarding/constant.dart';
 import 'package:taxonetime/screens/onBoarding/onBoardModel.dart';
-import 'package:taxonetime/screens/wrapper/wrapper.dart';
 import 'package:taxonetime/widgets/navbar.dart';
 
 import 'constant.dart';

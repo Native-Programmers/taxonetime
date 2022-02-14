@@ -1,9 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:taxonetime/controller/authController.dart';
-import 'package:taxonetime/screens/chat/chatbot.dart';
-import 'package:taxonetime/widgets/navbar.dart';
+import 'package:taxonetime/screens/chat/chatbody.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -28,7 +26,8 @@ class _HomeState extends State<Home> {
             style: TextStyle(fontSize: 20),
           ),
           centerTitle: true,
-          backgroundColor: Colors.deepOrange,
+          backgroundColor: const Color(0xFF41729F),
+          elevation: 0,
         ),
         body: Column(
           children: [
@@ -62,11 +61,11 @@ class _HomeState extends State<Home> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Get.to(const Chatbot());
+            Get.to(const ChatPage());
           },
           label: const Text('CHAT'),
-          // icon: const FaIcon(FontAwesomeIcons.facebookMessenger),
           icon: const Icon(Icons.chat),
+          backgroundColor: const Color(0xFF41729F),
         ),
       ),
     );

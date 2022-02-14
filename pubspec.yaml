@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0-80.1.beta <3.0.0"
+  sdk: ">=2.15.1 <3.0.0"
 
 dependencies:
   flutter:
@@ -37,7 +37,6 @@ dependencies:
   dialog_flowtter: ^0.3.1
   intl: ^0.17.0
   bubble: ^1.2.1
-  dialogflow_flutter: ^0.0.4
   persistent_bottom_nav_bar: ^4.0.2
   carousel_slider: ^4.0.0
   news_api_flutter_package: ^1.1.0

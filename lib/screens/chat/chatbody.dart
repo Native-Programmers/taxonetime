@@ -1,39 +1,175 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/material.dart';
 
-class AppBody extends StatelessWidget {
+class ChatPage extends StatefulWidget {
+  const ChatPage({Key? key, this.title}) : super(key: key);
+
+  final String? title;
+
+  @override
+  _ChatPageState createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  late DialogFlowtter dialogFlowtter;
+  final TextEditingController _controller = TextEditingController();
+
+  List<Map<String, dynamic>> messages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    DialogFlowtter.fromFile().then((instance) => dialogFlowtter = instance);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Chat Bot',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: const Color(0xFF41729F),
+        actions: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 3.5),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            width: 50,
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10000),
+              color: Colors.white,
+            ),
+            child: Image.asset('assets/images/robot.png'),
+          )
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(child: ChatBody(messages: messages)),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 5,
+            ),
+            color: const Color(0xFF41729F),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    cursorColor: Colors.white,
+                    controller: _controller,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter Message Here',
+                      hintStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  color: Colors.white,
+                  icon: const Icon(Icons.send),
+                  onPressed: () {
+                    sendMessage(_controller.text);
+                    _controller.clear();
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void sendMessage(String text) async {
+    if (text.isEmpty) return;
+    setState(() {
+      addMessage(
+        Message(text: DialogText(text: [text])),
+        true,
+      );
+    });
+
+    DetectIntentResponse response = await dialogFlowtter.detectIntent(
+      queryInput: QueryInput(text: TextInput(text: text)),
+    );
+
+    if (response.message == null) return;
+    setState(() {
+      addMessage(response.message!);
+    });
+  }
+
+  void addMessage(Message message, [bool isUserMessage = false]) {
+    messages.add({
+      'message': message,
+      'isUserMessage': isUserMessage,
+    });
+  }
+
+  @override
+  void dispose() {
+    dialogFlowtter.dispose();
+    super.dispose();
+  }
+}
+
+class ChatBot extends StatefulWidget {
+  const ChatBot({Key? key}) : super(key: key);
+
+  @override
+  _ChatBotState createState() => _ChatBotState();
+}
+
+class _ChatBotState extends State<ChatBot> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class ChatBody extends StatelessWidget {
   final List<Map<String, dynamic>> messages;
 
-  const AppBody({
+  const ChatBody({
     Key? key,
     this.messages = const [],
   }) : super(key: key);
 
-  @override
+//   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemBuilder: (context, i) {
-        var obj = messages[messages.length - 1 - i];
-        Message message = obj['message'];
-        bool isUserMessage = obj['isUserMessage'] ?? false;
-        return Row(
-          mainAxisAlignment:
-              isUserMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _MessageContainer(
-              message: message,
-              isUserMessage: isUserMessage,
-            ),
-          ],
-        );
-      },
-      separatorBuilder: (_, i) => Container(height: 10),
-      itemCount: messages.length,
-      reverse: true,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 20,
+    return Scaffold(
+      body: ListView.separated(
+        itemBuilder: (context, i) {
+          var obj = messages[messages.length - 1 - i];
+          Message message = obj['message'];
+          bool isUserMessage = obj['isUserMessage'] ?? false;
+          return Row(
+            mainAxisAlignment:
+                isUserMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _MessageContainer(
+                message: message,
+                isUserMessage: isUserMessage,
+              ),
+            ],
+          );
+        },
+        separatorBuilder: (_, i) => Container(height: 10),
+        itemCount: messages.length,
+        reverse: true,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 20,
+        ),
       ),
     );
   }
@@ -52,7 +188,7 @@ class _MessageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: 250),
+      constraints: const BoxConstraints(maxWidth: 250),
       child: LayoutBuilder(
         builder: (context, constrains) {
           switch (message.type) {
@@ -62,13 +198,15 @@ class _MessageContainer extends StatelessWidget {
             default:
               return Container(
                 decoration: BoxDecoration(
-                  color: isUserMessage ? Colors.blue : Colors.orange,
+                  color: isUserMessage
+                      ? const Color(0xFF41729F)
+                      : Colors.deepOrange,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 padding: const EdgeInsets.all(10),
                 child: Text(
                   message.text?.text?[0] ?? '',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                   ),
                 ),

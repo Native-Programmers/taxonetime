@@ -21,19 +21,19 @@ class BottomNavBar extends StatelessWidget {
         PersistentBottomNavBarItem(
           icon: const Icon(CupertinoIcons.home),
           title: ("Home"),
-          activeColorPrimary: CupertinoColors.activeBlue,
+          activeColorPrimary: const Color(0xFF274472),
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),
         PersistentBottomNavBarItem(
           icon: const Icon(CupertinoIcons.news),
           title: ("News"),
-          activeColorPrimary: CupertinoColors.activeBlue,
+          activeColorPrimary: const Color(0xFF274472),
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),
         PersistentBottomNavBarItem(
           icon: const Icon(CupertinoIcons.settings),
           title: ("Settings"),
-          activeColorPrimary: CupertinoColors.activeBlue,
+          activeColorPrimary: const Color(0xFF274472),
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),
       ];

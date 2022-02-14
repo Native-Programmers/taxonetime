@@ -25,6 +25,7 @@ class NewsPage extends StatelessWidget {
     return AppBar(
       title: const Text("Tax News"),
       bottom: _buildTabBar(),
+      backgroundColor: const Color(0xFF41729F),
     );
   }
 

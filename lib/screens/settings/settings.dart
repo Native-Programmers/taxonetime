@@ -15,7 +15,7 @@ class _SettingsState extends State<Settings> {
       child: Scaffold(
           appBar: AppBar(
             title: const Text("Settings"),
-            backgroundColor: Colors.deepOrangeAccent,
+            backgroundColor: const Color(0xFF41729F),
           ),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,7 +73,7 @@ class _SettingsState extends State<Settings> {
                     width: 200,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.deepOrange,
+                          primary: const Color(0xFF41729F),
                         ),
                         onPressed: () {
                           AuthController.authInstance.signOut();
