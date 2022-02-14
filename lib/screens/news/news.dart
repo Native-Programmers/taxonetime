@@ -51,7 +51,7 @@ class NewsPage extends StatelessWidget {
 
   Widget _buildTopHeadlinesTabView() {
     return FutureBuilder<List<Article>>(
-        future: _newsAPI.getTopHeadlines(country: "us"),
+        future: _newsAPI.getTopHeadlines(category: 'business',country: ''),
         builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
           return snapshot.connectionState == ConnectionState.done
               ? snapshot.hasData
@@ -63,7 +63,7 @@ class NewsPage extends StatelessWidget {
 
   Widget _buildEverythingTabView() {
     return FutureBuilder<List<Article>>(
-        future: _newsAPI.getEverything(query: "bitcoin"),
+        future: _newsAPI.getEverything(query: "Tax in Pakistan"),
         builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
           return snapshot.connectionState == ConnectionState.done
               ? snapshot.hasData
