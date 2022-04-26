@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:taxonetime/screens/home/home.dart';
 import 'package:taxonetime/screens/news/news.dart';
+import 'package:taxonetime/screens/scanners/cnicScanner.dart';
 import 'package:taxonetime/screens/settings/settings.dart';
 
 PersistentTabController _controller = PersistentTabController(initialIndex: 0);
@@ -13,7 +14,12 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> _buildScreens() {
-      return [const Home(), const NewsPage(), const Settings()];
+      return [
+        const Home(),
+        const NewsPage(),
+        const Settings(),
+        const Scanners()
+      ];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -33,6 +39,12 @@ class BottomNavBar extends StatelessWidget {
         PersistentBottomNavBarItem(
           icon: const Icon(CupertinoIcons.settings),
           title: ("Settings"),
+          activeColorPrimary: const Color(0xFF274472),
+          inactiveColorPrimary: CupertinoColors.systemGrey,
+        ),
+        PersistentBottomNavBarItem(
+          icon: const Icon(Icons.scanner),
+          title: ("Scanners"),
           activeColorPrimary: const Color(0xFF274472),
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),
@@ -58,12 +70,12 @@ class BottomNavBar extends StatelessWidget {
       ),
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties: ItemAnimationProperties(
+      itemAnimationProperties: const ItemAnimationProperties(
         // Navigation Bar's items animation properties.
         duration: Duration(milliseconds: 200),
         curve: Curves.ease,
       ),
-      screenTransitionAnimation: ScreenTransitionAnimation(
+      screenTransitionAnimation: const ScreenTransitionAnimation(
         // Screen transition animation on change of selected tab.
         animateTabTransition: true,
         curve: Curves.ease,

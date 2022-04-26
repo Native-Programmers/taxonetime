@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 // import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -6,6 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxonetime/screens/auth/login.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:taxonetime/screens/inputTimeline/timeline.dart';
 import 'package:taxonetime/screens/onBoarding/onBoard.dart';
 import 'package:taxonetime/widgets/navbar.dart';
 
@@ -34,6 +36,10 @@ class AuthController extends GetxController {
   }
 
   _setInitialScreen(User? user) async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection('user_info')
+        .doc(user!.uid)
+        .get();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isViewed = prefs.getInt('onBoard');
     var _isViewed = isViewed;

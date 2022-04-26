@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nativeprogrammers.taxonetime">
-    
+    <uses-permission android:name="android.permission.CAMERA" />
+
    <queries>
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
     </queries>
