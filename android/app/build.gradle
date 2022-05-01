@@ -45,7 +45,7 @@ android {
     defaultConfig {
         applicationId "com.nativeprogrammers.taxonetime"
         minSdkVersion 24
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

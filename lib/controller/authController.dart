@@ -45,7 +45,7 @@ class AuthController extends GetxController {
     var _isViewed = isViewed;
     if (_isViewed != 0) {
       Get.offAll(() => const OnBoard());
-    } else if (user != null) {
+    } else if (FirebaseAuth.instance.currentUser != null) {
       //user is logged in
       Get.offAll(() => const BottomNavBar());
     } else {

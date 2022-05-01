@@ -47,24 +47,28 @@ class _ScannersState extends State<Scanners> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const Divider(
               height: 18,
+              color: Colors.transparent,
             ),
-            Text('Enter ID Card Details',
+            const Text('Enter ID Card Details',
                 style: TextStyle(
                     color: Color(kDarkGreyColor),
                     fontSize: 23.0,
                     fontWeight: FontWeight.bold)),
-            SizedBox(
+            const Divider(
               height: 5,
+              color: Colors.transparent,
             ),
-            Text('To verify your Account, please enter your CNIC details.',
+            const Text(
+                'To verify your Account, please enter your CNIC details.',
                 style: TextStyle(
                     color: Color(kLightGreyColor),
                     fontSize: 15.0,
                     fontWeight: FontWeight.w500)),
-            SizedBox(
+            const Divider(
               height: 35,
+              color: Colors.transparent,
             ),
             Expanded(
               child: ListView(
@@ -83,8 +87,9 @@ class _ScannersState extends State<Scanners> {
                   _dataField(
                       text: 'Date of Card Expire',
                       textEditingController: doeTEController),
-                  SizedBox(
-                    height: 20,
+                  const Divider(
+                    height: 18,
+                    color: Colors.transparent,
                   ),
                   _getScanCNICBtn(),
                 ],
@@ -113,11 +118,11 @@ class _ScannersState extends State<Scanners> {
                 height: 45,
                 margin: const EdgeInsets.only(left: 3.0, right: 7.0),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                       colors: [
-                        const Color(kDeepDarkGreenColor),
-                        const Color(kDarkGreenColor),
-                        const Color(kGradientGreyColor),
+                        Color(kDeepDarkGreenColor),
+                        Color(kDarkGreenColor),
+                        Color(kGradientGreyColor),
                       ],
                       stops: [
                         0.0,

@@ -14,15 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   isViewed = prefs.getInt('onBoard');
-  await Firebase.initializeApp(
-      options: const FirebaseOptions(
-          apiKey: "AIzaSyAdOd2tZVyVPrwzYnkLhPNlnt-JUeXUhAU",
-          authDomain: "t-o-t-5ec61.firebaseapp.com",
-          projectId: "t-o-t-5ec61",
-          storageBucket: "t-o-t-5ec61.appspot.com",
-          messagingSenderId: "569930552842",
-          appId: "1:569930552842:web:5f114153d2527a5ed431f3",
-          measurementId: "G-MKSS56R7QC"));
+  await Firebase.initializeApp();
   Get.put(AuthController());
   var isviewed = isViewed;
   runApp(
