@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cnic_scanner/cnic_scanner.dart';
 import 'package:cnic_scanner/model/cnic_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -156,35 +158,87 @@ class _ScannersState extends State<Scanners> {
               color: Colors.transparent,
             ),
             ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.green[400],
-                ),
-                onPressed: () {
-                  if (emailTEController.text.isEmpty ||
-                      nameTEController.text.isEmpty ||
-                      cnicTEController.text.isEmpty ||
-                      dobTEController.text.isEmpty ||
-                      doiTEController.text.isEmpty ||
-                      doeTEController.text.isEmpty) {
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                padding: const EdgeInsets.all(0.0),
+              ),
+              onPressed: () {
+                if (emailTEController.text.isEmpty ||
+                    nameTEController.text.isEmpty ||
+                    cnicTEController.text.isEmpty ||
+                    dobTEController.text.isEmpty ||
+                    doiTEController.text.isEmpty ||
+                    doeTEController.text.isEmpty) {
+                  Get.snackbar(
+                    'Error',
+                    'Please scan before submission!',
+                    borderRadius: 0,
+                    backgroundColor: Colors.red,
+                    margin: const EdgeInsets.all(0),
+                    colorText: Colors.white,
+                  );
+                } else {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) => WillPopScope(
+                            onWillPop: () async => false,
+                            child: AlertDialog(
+                              backgroundColor: Colors.transparent,
+                              elevation: 0,
+                              content: Lottie.asset(
+                                  'assets/animations/squares_loading.json'),
+                            ),
+                          ));
+                  FirebaseFirestore.instance
+                      .collection('userinfo')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .set({
+                    'username': nameTEController.text,
+                    'email': emailTEController.text,
+                    'cnic': cnicTEController.text,
+                    'dob': dobTEController.text,
+                    'doe': doeTEController.text,
+                    'doi': doiTEController.text,
+                  }).then((value) {
+                    Get.back();
+                    Get.back();
+                    Get.snackbar(
+                      'Success',
+                      'Data successfully submitted. Please continue with your tour.',
+                      borderRadius: 0,
+                      backgroundColor: Colors.green,
+                      margin: const EdgeInsets.all(0),
+                      colorText: Colors.white,
+                    );
+                  }).onError((error, stackTrace) {
+                    Get.back();
+                    Get.back();
                     Get.snackbar(
                       'Error',
-                      'Please scan before submission!',
+                      error.toString(),
                       borderRadius: 0,
                       backgroundColor: Colors.red,
                       margin: const EdgeInsets.all(0),
                       colorText: Colors.white,
                     );
-                  }
-                },
-                child: const Center(
-                  child: Text(
-                    'Update Profile Now',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ))
+                  });
+                }
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: 500,
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                    gradient: invertedgradients),
+                padding: const EdgeInsets.all(12.0),
+                child: const Text('Update Information',
+                    style: TextStyle(fontSize: 18)),
+              ),
+            )
           ],
         ),
       ),
