@@ -1,11 +1,14 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:taxonetime/screens/addInfo/add_user_info.dart';
+import 'package:taxonetime/colors/colors.dart';
 import 'package:taxonetime/screens/chat/chatbody.dart';
+import 'package:taxonetime/screens/scanners/cnicScanner.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -31,16 +34,25 @@ class _HomeState extends State<Home> {
           .then((value) {
         if (!value.exists) {
           showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                    title: const Text('User Data Not Found'),
-                    content: AddUserInfo(
-                      uid: FirebaseAuth.instance.currentUser!.uid,
-                      email: FirebaseAuth.instance.currentUser!.email,
-                    ),
-                  ));
-          print(value.data());
-          print(FirebaseAuth.instance.currentUser!.uid);
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => WillPopScope(
+              onWillPop: () async => false,
+              child: AlertDialog(
+                title: const Text(
+                  'Scan CNIC to continue',
+                  style: TextStyle(
+                      color: Color(kDarkGreyColor),
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold),
+                ),
+                content: Scanners(
+                  uid: FirebaseAuth.instance.currentUser!.uid,
+                  email: FirebaseAuth.instance.currentUser!.email,
+                ),
+              ),
+            ),
+          );
         }
       });
     });

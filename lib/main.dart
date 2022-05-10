@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:taxonetime/screens/auth/login.dart';
 import 'package:taxonetime/screens/onBoarding/onBoard.dart';
@@ -38,7 +39,10 @@ Future<void> main() async {
       ),
       home: isviewed != 0
           ? const OnBoard()
-          : const Scaffold(body: Center(child: CircularProgressIndicator())),
+          : Scaffold(
+            backgroundColor: Colors.white,
+              body: Center(
+                  child: Lottie.asset('assets/animations/simple_loading.json'))),
     ),
   );
 }

@@ -1,12 +1,16 @@
 import 'package:cnic_scanner/cnic_scanner.dart';
 import 'package:cnic_scanner/model/cnic_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:taxonetime/colors/colors.dart';
-import 'package:taxonetime/widgets/cnicDialog.dart';
 
 class Scanners extends StatefulWidget {
-  const Scanners({Key? key}) : super(key: key);
+  Scanners({Key? key, required this.uid, required this.email})
+      : super(key: key);
+  String uid;
+  String? email;
 
   @override
   State<Scanners> createState() => _ScannersState();
@@ -14,6 +18,7 @@ class Scanners extends StatefulWidget {
 
 class _ScannersState extends State<Scanners> {
   TextEditingController nameTEController = TextEditingController(),
+      emailTEController = TextEditingController(),
       cnicTEController = TextEditingController(),
       dobTEController = TextEditingController(),
       doiTEController = TextEditingController(),
@@ -30,6 +35,7 @@ class _ScannersState extends State<Scanners> {
     if (cnicModel == null) return;
     setState(() {
       _cnicModel = cnicModel;
+      emailTEController.text = widget.email as String;
       nameTEController.text = _cnicModel.cnicHolderName;
       cnicTEController.text = _cnicModel.cnicNumber;
       dobTEController.text = _cnicModel.cnicHolderDateOfBirth;
@@ -38,63 +44,147 @@ class _ScannersState extends State<Scanners> {
     });
   }
 
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 25),
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const Divider(
-              height: 18,
-              color: Colors.transparent,
-            ),
-            const Text('Enter ID Card Details',
-                style: TextStyle(
-                    color: Color(kDarkGreyColor),
-                    fontSize: 23.0,
-                    fontWeight: FontWeight.bold)),
+            Card(
+                shadowColor: const Color(kShadowColor),
+                elevation: 5,
+                margin: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 5,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 5),
+                      child: Icon(
+                        Icons.email,
+                        color: Color(kDarkGreenColor),
+                        size: 17,
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Padding(
+                            padding:
+                                EdgeInsets.only(left: 15.0, top: 5, bottom: 3),
+                            child: Text(
+                              'Email Address',
+                              style: TextStyle(
+                                  color: Color(kDarkGreenColor),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 15.0, bottom: 5),
+                            child: TextFormField(
+                              enabled: false,
+                              controller: emailTEController,
+                              decoration: InputDecoration(
+                                hintText: widget.email as String,
+                                border: InputBorder.none,
+                                isDense: true,
+                                hintStyle: const TextStyle(
+                                    color: Color(kLightGreyColor),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
+                                contentPadding: const EdgeInsets.all(0),
+                              ),
+                              style: const TextStyle(
+                                  color: Color(kDarkGreyColor),
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
             const Divider(
               height: 5,
               color: Colors.transparent,
             ),
-            const Text(
-                'To verify your Account, please enter your CNIC details.',
-                style: TextStyle(
-                    color: Color(kLightGreyColor),
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w500)),
+            _dataField(text: 'Name', textEditingController: nameTEController),
             const Divider(
-              height: 35,
+              height: 5,
               color: Colors.transparent,
             ),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.all(0),
-                shrinkWrap: true,
-                children: [
-                  _dataField(
-                      text: 'Name', textEditingController: nameTEController),
-                  _cnicField(textEditingController: cnicTEController),
-                  _dataField(
-                      text: 'Date of Birth',
-                      textEditingController: dobTEController),
-                  _dataField(
-                      text: 'Date of Card Issue',
-                      textEditingController: doiTEController),
-                  _dataField(
-                      text: 'Date of Card Expire',
-                      textEditingController: doeTEController),
-                  const Divider(
-                    height: 18,
-                    color: Colors.transparent,
+            _cnicField(textEditingController: cnicTEController),
+            const Divider(
+              height: 5,
+              color: Colors.transparent,
+            ),
+            _dataField(
+                text: 'Date of Birth', textEditingController: dobTEController),
+            const Divider(
+              height: 5,
+              color: Colors.transparent,
+            ),
+            _dataField(
+                text: 'Date of Card Issue',
+                textEditingController: doiTEController),
+            const Divider(
+              height: 5,
+              color: Colors.transparent,
+            ),
+            _dataField(
+                text: 'Date of Card Expire',
+                textEditingController: doeTEController),
+            const Divider(
+              height: 18,
+              color: Colors.transparent,
+            ),
+            _getScanCNICBtn(),
+            const Divider(
+              height: 18,
+              color: Colors.transparent,
+            ),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.green[400],
+                ),
+                onPressed: () {
+                  if (emailTEController.text.isEmpty ||
+                      nameTEController.text.isEmpty ||
+                      cnicTEController.text.isEmpty ||
+                      dobTEController.text.isEmpty ||
+                      doiTEController.text.isEmpty ||
+                      doeTEController.text.isEmpty) {
+                    Get.snackbar(
+                      'Error',
+                      'Please scan before submission!',
+                      borderRadius: 0,
+                      backgroundColor: Colors.red,
+                      margin: const EdgeInsets.all(0),
+                      colorText: Colors.white,
+                    );
+                  }
+                },
+                child: const Center(
+                  child: Text(
+                    'Update Profile Now',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
-                  _getScanCNICBtn(),
-                ],
-              ),
-            )
+                ))
           ],
         ),
       ),
@@ -104,7 +194,7 @@ class _ScannersState extends State<Scanners> {
   /// these are my custom designs you can use according to your ease
   Widget _cnicField({required TextEditingController textEditingController}) {
     return Card(
-      elevation: 7,
+      elevation: 5,
       margin: const EdgeInsets.only(top: 2.0, bottom: 5.0),
       child: Container(
         margin:
@@ -139,31 +229,39 @@ class _ScannersState extends State<Scanners> {
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'CNIC Number',
                     style: TextStyle(
                         color: Color(kDarkGreenColor),
                         fontSize: 13.0,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const Divider(
                     height: 5,
+                    color: Colors.transparent,
                   ),
                   Row(
                     children: [
                       Image.asset("assets/images/cnic.png",
                           width: 40, height: 30),
                       Expanded(
-                        child: TextField(
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            }
+                            return null;
+                          },
+                          enabled: false,
                           controller: textEditingController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: '41000-0000000-0',
                             hintStyle: TextStyle(color: Color(kLightGreyColor)),
                             border: InputBorder.none,
                             isDense: true,
                             contentPadding: EdgeInsets.only(left: 5.0),
                           ),
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Color(kDarkGreyColor),
                               fontWeight: FontWeight.bold),
                           textInputAction: TextInputAction.done,
@@ -186,7 +284,7 @@ class _ScannersState extends State<Scanners> {
       {required String text,
       required TextEditingController textEditingController}) {
     return Card(
-        shadowColor: Color(kShadowColor),
+        shadowColor: const Color(kShadowColor),
         elevation: 5,
         margin: const EdgeInsets.only(
           top: 10,
@@ -200,7 +298,7 @@ class _ScannersState extends State<Scanners> {
               padding: const EdgeInsets.only(left: 5),
               child: Icon(
                 (text == "Name") ? Icons.person : Icons.date_range,
-                color: Color(kDarkGreenColor),
+                color: const Color(kDarkGreenColor),
                 size: 17,
               ),
             ),
@@ -214,7 +312,7 @@ class _ScannersState extends State<Scanners> {
                         const EdgeInsets.only(left: 15.0, top: 5, bottom: 3),
                     child: Text(
                       text.toUpperCase(),
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Color(kDarkGreenColor),
                           fontSize: 12,
                           fontWeight: FontWeight.bold),
@@ -222,19 +320,26 @@ class _ScannersState extends State<Scanners> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0, bottom: 5),
-                    child: TextField(
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      enabled: false,
                       controller: textEditingController,
                       decoration: InputDecoration(
                         hintText: (text == "Name") ? "User Name" : 'DD/MM/YYYY',
                         border: InputBorder.none,
                         isDense: true,
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                             color: Color(kLightGreyColor),
                             fontSize: 14,
                             fontWeight: FontWeight.bold),
-                        contentPadding: EdgeInsets.all(0),
+                        contentPadding: const EdgeInsets.all(0),
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Color(kDarkGreyColor),
                           fontWeight: FontWeight.bold),
                       textInputAction: TextInputAction.done,
@@ -252,27 +357,21 @@ class _ScannersState extends State<Scanners> {
   }
 
   Widget _getScanCNICBtn() {
-    return RaisedButton(
-      elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        elevation: 5,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        padding: const EdgeInsets.all(0.0),
+      ),
       onPressed: () {
-        /// this is the custom dialog that takes 2 arguments "Camera" and "Gallery"
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return CustomDialogBox(onCameraBTNPressed: () {
-                scanCnic(ImageSource.camera);
-              }, onGalleryBTNPressed: () {
-                scanCnic(ImageSource.gallery);
-              });
-            });
+        showOrientation();
+        // scanCnic(ImageSource.camera);
       },
-      textColor: Colors.white,
-      padding: EdgeInsets.all(0.0),
       child: Container(
         alignment: Alignment.center,
         width: 500,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           gradient: LinearGradient(colors: <Color>[
             Color(kDeepDarkGreenColor),
@@ -281,8 +380,52 @@ class _ScannersState extends State<Scanners> {
           ]),
         ),
         padding: const EdgeInsets.all(12.0),
-        child: Text('Scan CNIC', style: TextStyle(fontSize: 18)),
+        child: const Text('Scan CNIC', style: TextStyle(fontSize: 18)),
       ),
     );
+  }
+
+  Future<void> showOrientation() async {
+    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      Future.delayed(const Duration(seconds: 5)).then((value) {
+        Get.back();
+        scanCnic(ImageSource.camera);
+      });
+    }
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => WillPopScope(
+              onWillPop: () async => false,
+              child: AlertDialog(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(5.00),
+                        child: Lottie.asset(
+                            'assets/animations/portrait_mode.json')),
+                    const Divider(),
+                    const Text(
+                      'STARTING SCANNER!!!',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const Divider(),
+                    const Text(
+                      'Scan in portrait mode!',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ));
   }
 }

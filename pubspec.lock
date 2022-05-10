@@ -22,13 +22,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.2"
-  beauty_textfield:
-    dependency: "direct main"
-    description:
-      name: beauty_textfield
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -492,6 +485,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  lottie:
+    dependency: "direct main"
+    description:
+      name: lottie
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.0"
   matcher:
     dependency: transitive
     description:

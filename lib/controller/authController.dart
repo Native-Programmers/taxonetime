@@ -7,7 +7,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxonetime/screens/auth/login.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:taxonetime/screens/inputTimeline/timeline.dart';
 import 'package:taxonetime/screens/onBoarding/onBoard.dart';
 import 'package:taxonetime/widgets/navbar.dart';
 

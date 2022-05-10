@@ -18,7 +18,6 @@ class BottomNavBar extends StatelessWidget {
         const Home(),
         const NewsPage(),
         const Settings(),
-        const Scanners()
       ];
     }
 
@@ -39,12 +38,6 @@ class BottomNavBar extends StatelessWidget {
         PersistentBottomNavBarItem(
           icon: const Icon(CupertinoIcons.settings),
           title: ("Settings"),
-          activeColorPrimary: const Color(0xFF274472),
-          inactiveColorPrimary: CupertinoColors.systemGrey,
-        ),
-        PersistentBottomNavBarItem(
-          icon: const Icon(Icons.scanner),
-          title: ("Scanners"),
           activeColorPrimary: const Color(0xFF274472),
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),
