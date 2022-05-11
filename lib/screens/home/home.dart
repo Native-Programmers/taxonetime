@@ -7,8 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:taxonetime/colors/colors.dart';
+import 'package:taxonetime/controller/authController.dart';
+import 'package:taxonetime/models/user.dart';
 import 'package:taxonetime/screens/chat/chatbody.dart';
 import 'package:taxonetime/screens/scanners/cnicScanner.dart';
+
+List<String> cnicImages = [];
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -28,7 +32,7 @@ class _HomeState extends State<Home> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       FirebaseFirestore.instance
-          .collection('user_info')
+          .collection('userinfo')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get()
           .then((value) {
@@ -53,6 +57,26 @@ class _HomeState extends State<Home> {
               ),
             ),
           );
+        } else {
+          print('User Id : ${FirebaseAuth.instance.currentUser!.uid}');
+          FirebaseFirestore.instance
+              .collection('userinfo')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .get()
+              .then((value) {
+            print(value.data()!['cnic']);
+            AuthController.authInstance.userData.value =
+                Users.fromSnapshot(value);
+          }).onError((error, stackTrace) {
+            Get.snackbar(
+              'Error',
+              error.toString(),
+              borderRadius: 0,
+              backgroundColor: Colors.red,
+              margin: const EdgeInsets.all(0),
+              colorText: Colors.white,
+            );
+          });
         }
       });
     });
@@ -63,7 +87,8 @@ class _HomeState extends State<Home> {
     DateTime _lastExitTime = DateTime.now();
     return WillPopScope(
       onWillPop: () async {
-        if (DateTime.now().difference(_lastExitTime) >= Duration(seconds: 2)) {
+        if (DateTime.now().difference(_lastExitTime) >=
+            const Duration(seconds: 2)) {
           //showing message to user
 
           Get.snackbar(

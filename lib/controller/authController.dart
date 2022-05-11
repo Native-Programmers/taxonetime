@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxonetime/models/user.dart';
 import 'package:taxonetime/screens/auth/login.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:taxonetime/screens/onBoarding/onBoard.dart';
@@ -17,6 +18,16 @@ class AuthController extends GetxController {
   static AuthController authInstance = Get.find();
 
   late Rx<User?> firebaseUser;
+  Rx<Users> userData = Users(
+          cnicFront: '',
+          cnicBack: '',
+          dob: '',
+          documents: [],
+          email: '',
+          name: '',
+          deviceId: '',
+          uid: '')
+      .obs;
   GoogleSignInAccount? googleAccount;
   final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: <String>[
@@ -35,10 +46,6 @@ class AuthController extends GetxController {
   }
 
   _setInitialScreen(User? user) async {
-    var snapshot = await FirebaseFirestore.instance
-        .collection('user_info')
-        .doc(user!.uid)
-        .get();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isViewed = prefs.getInt('onBoard');
     var _isViewed = isViewed;
@@ -46,7 +53,9 @@ class AuthController extends GetxController {
       Get.offAll(() => const OnBoard());
     } else if (FirebaseAuth.instance.currentUser != null) {
       //user is logged in
-      Get.offAll(() => const BottomNavBar());
+      Get.offAll(() {
+        return const BottomNavBar();
+      });
     } else {
       //user is not logged in
       Get.offAll(() => const Login());

@@ -1,3 +1,5 @@
+// ignore_for_file: equal_keys_in_map
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cnic_scanner/cnic_scanner.dart';
 import 'package:cnic_scanner/model/cnic_model.dart';
@@ -203,6 +205,8 @@ class _ScannersState extends State<Scanners> {
                     'dob': dobTEController.text,
                     'doe': doeTEController.text,
                     'doi': doiTEController.text,
+                    'cnic': {'cnicFront': null, 'cnicBack': null},
+                    'documents': [],
                   }).then((value) {
                     Get.back();
                     Get.back();
