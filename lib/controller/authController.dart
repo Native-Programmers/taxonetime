@@ -1,31 +1,25 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxonetime/models/user.dart';
-// import 'package:taxonetime/screens/auth/login.dart';
+import 'package:taxonetime/screens/auth/login.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-// import 'package:taxonetime/screens/onBoarding/onBoard.dart';
-// import 'package:taxonetime/widgets/navbar.dart';
+import 'package:taxonetime/screens/onBoarding/onBoard.dart';
+import 'package:taxonetime/widgets/navbar.dart';
 
 int? isViewed;
 
 class AuthController extends GetxController {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static AuthController authInstance = Get.find();
-
+  Rx<ThemeData> theme = ;
   late Rx<User?> firebaseUser;
-  Rx<Users> userData = Users(
-          cnicFront: '',
-          cnicBack: '',
-          dob: '',
-          documents: [],
-          email: '',
-          name: '',
-          uid: '')
-      .obs;
+  Rx<Users> userData =
+      Users(dob: '', documents: [], email: '', name: '', uid: '', cnic: '').obs;
   GoogleSignInAccount? googleAccount;
   final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: <String>[
@@ -40,26 +34,28 @@ class AuthController extends GetxController {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
 
-    // ever(firebaseUser, _setInitialScreen);
+    ever(firebaseUser, _setInitialScreen);
   }
 
-  // _setInitialScreen(User? user) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   isViewed = prefs.getInt('onBoard');
-  //   var _isViewed = isViewed;
-  //   if (_isViewed != 0) {
-  //     Get.offAll(() => const OnBoard());
-  //   } else if (FirebaseAuth.instance.currentUser != null) {
-  //     //user is logged in
-  //     Get.offAll(() {
-  //       return const BottomNavBar();
-  //     });
-  //   } else {
-  //     //user is not logged in
-  //     Get.offAll(() => const Login());
-  //   }
-  // }
-
+  _setInitialScreen(User? user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isViewed = prefs.getInt('onBoard');
+    var _isViewed = isViewed;
+    if (_isViewed != 0) {
+      Get.offAll(() => const OnBoard());
+    } else if (FirebaseAuth.instance.currentUser != null) {
+      //user is logged in
+      Get.offAll(() {
+        return const BottomNavBar();
+      });
+    } else {
+      //user is not logged in
+      Get.offAll(() => const Login());
+    }
+  }
+  void setTheme (){
+    
+  }
   Future<UserCredential> signInWithFacebook() async {
     final LoginResult loginResult = await FacebookAuth.instance.login();
 

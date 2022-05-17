@@ -1,3 +1,4 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/material.dart';
 
@@ -24,67 +25,72 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Chat Bot',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+    return ThemeSwitchingArea(
+      child: Builder(builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Chat Bot',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: const Color(0xFF41729F),
+            actions: [
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 3.5),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                width: 50,
+                height: 30,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10000),
+                  color: Colors.white,
+                ),
+                child: Image.asset('assets/images/robot.png'),
+              )
+            ],
           ),
-        ),
-        backgroundColor: const Color(0xFF41729F),
-        actions: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 3.5),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            width: 50,
-            height: 30,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10000),
-              color: Colors.white,
-            ),
-            child: Image.asset('assets/images/robot.png'),
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(child: ChatBody(messages: messages)),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 5,
-            ),
-            color: const Color(0xFF41729F),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    cursorColor: Colors.white,
-                    controller: _controller,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Enter Message Here',
-                      hintStyle: TextStyle(
-                        color: Colors.white,
+          body: Column(
+            children: [
+              Expanded(child: ChatBody(messages: messages)),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
+                color: const Color(0xFF41729F),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        cursorColor: Colors.white,
+                        controller: _controller,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Enter Message Here',
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    IconButton(
+                      color: Colors.white,
+                      icon: const Icon(Icons.send),
+                      onPressed: () {
+                        sendMessage(_controller.text);
+                        _controller.clear();
+                      },
+                    ),
+                  ],
                 ),
-                IconButton(
-                  color: Colors.white,
-                  icon: const Icon(Icons.send),
-                  onPressed: () {
-                    sendMessage(_controller.text);
-                    _controller.clear();
-                  },
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      }),
     );
   }
 

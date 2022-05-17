@@ -15,8 +15,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 
-FirebaseStorage _storage = FirebaseStorage.instance;
-var _storageRef = _storage.ref().child('gs://t-o-t-5ec61.appspot.com/userCnic');
+String? deviceId;
 File? cnic;
 String? Uri;
 File? _photo;
@@ -60,11 +59,17 @@ class _ScannersState extends State<Scanners> {
     });
   }
 
-  Future<String?> getDeviceId() async {
-    return PlatformDeviceId.getDeviceId;
+  Future<void> getDeviceId() async {
+    deviceId = PlatformDeviceId.getDeviceId as String;
   }
 
   final _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    getDeviceId();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -221,9 +226,8 @@ class _ScannersState extends State<Scanners> {
                     'dob': dobTEController.text,
                     'doe': doeTEController.text,
                     'doi': doiTEController.text,
-                    'cnic': {'cnicFront': '', 'cnicBack': ''},
                     'documents': [],
-                    'deviceId': getDeviceId(),
+                    'deviceId': deviceId,
                   }).then((value) {
                     Get.back();
                     Get.back();
@@ -257,65 +261,6 @@ class _ScannersState extends State<Scanners> {
                     gradient: invertedgradients),
                 padding: const EdgeInsets.all(12.0),
                 child: const Text('Update Information',
-                    style: TextStyle(fontSize: 18)),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.transparent,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                padding: const EdgeInsets.all(0.0),
-              ),
-              onPressed: () {
-                showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (_) => AlertDialog(
-                      title: const Text('CNIC IMAGES'),
-                      content: Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 500,
-                              decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10.0)),
-                                  gradient: invertedgradients),
-                              padding: const EdgeInsets.all(12.0),
-                              child: const Text('CNIC FRONT',
-                                  style: TextStyle(fontSize: 18)),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 500,
-                              decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10.0)),
-                                  gradient: invertedgradients),
-                              padding: const EdgeInsets.all(12.0),
-                              child: const Text('CNIC BACK',
-                                  style: TextStyle(fontSize: 18)),
-                            ),
-                          )
-                        ],
-                      )),
-                );
-              },
-              child: Container(
-                alignment: Alignment.center,
-                width: 500,
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                    gradient: invertedgradients),
-                padding: const EdgeInsets.all(12.0),
-                child: const Text('Upload cnic images',
                     style: TextStyle(fontSize: 18)),
               ),
             ),
@@ -500,7 +445,6 @@ class _ScannersState extends State<Scanners> {
       ),
       onPressed: () {
         showOrientation();
-        // scanCnic(ImageSource.camera);
       },
       child: Container(
         alignment: Alignment.center,
@@ -561,71 +505,5 @@ class _ScannersState extends State<Scanners> {
                 ),
               ),
             ));
-  }
-
-  Future imgFromGallery() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _photo = File(pickedFile.path);
-        uploadFile();
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
-
-  Future imgFromCamera() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-
-    setState(() {
-      if (pickedFile != null) {
-        _photo = File(pickedFile.path);
-        uploadFile();
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
-
-  Future uploadFile() async {
-    if (_photo == null) return;
-
-    try {
-      await _storageRef.putFile(_photo!);
-    } catch (e) {
-      print('error occurred');
-    }
-  }
-
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: SizedBox(
-              child: Wrap(
-                children: <Widget>[
-                  ListTile(
-                      leading: const Icon(Icons.photo_library),
-                      title: const Text('Gallery'),
-                      onTap: () {
-                        imgFromGallery();
-                        Navigator.of(context).pop();
-                      }),
-                  ListTile(
-                    leading: const Icon(Icons.photo_camera),
-                    title: const Text('Camera'),
-                    onTap: () {
-                      imgFromCamera();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
   }
 }
