@@ -58,15 +58,15 @@ class _HomeState extends State<Home> {
             ),
           );
         } else {
-          print('User Id : ${FirebaseAuth.instance.currentUser!.uid}');
           FirebaseFirestore.instance
               .collection('userinfo')
               .doc(FirebaseAuth.instance.currentUser!.uid)
               .get()
               .then((value) {
-            print(value.data()!['cnic']);
             AuthController.authInstance.userData.value =
                 Users.fromSnapshot(value);
+            print(
+                'User Data fetched : ${AuthController.authInstance.userData.value.toString()}');
           }).onError((error, stackTrace) {
             Get.snackbar(
               'Error',
