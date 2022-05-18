@@ -18,7 +18,9 @@ Widget checkLogin() {
 }
 
 int? isViewed;
+bool? themeState;
 late SharedPreferences prefs;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();

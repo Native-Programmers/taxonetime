@@ -3,6 +3,7 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taxonetime/controller/authController.dart';
 import 'package:taxonetime/main.dart';
 import 'package:taxonetime/screens/onBoarding/onBoard.dart';
 import 'package:taxonetime/themes.dart';
@@ -13,7 +14,9 @@ class TaxOneTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ThemeProvider(
-      initTheme: MyThemes.darkTheme,
+      initTheme: AuthController.authInstance.themeState.value
+          ? MyThemes.darkTheme
+          : MyThemes.lightTheme,
       builder: (context, myTheme) {
         return GetMaterialApp(
           // turn it false before publishing

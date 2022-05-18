@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:news_api_flutter_package/model/article.dart';
 import 'package:news_api_flutter_package/model/source.dart';
 import 'package:news_api_flutter_package/news_api_flutter_package.dart';
@@ -7,9 +8,14 @@ import '../../models/error.dart';
 
 NewsAPI _newsAPI = NewsAPI("366ae2ace55b4fd0814f31fcf7aac992");
 
-class NewsPage extends StatelessWidget {
+class NewsPage extends StatefulWidget {
   const NewsPage({Key? key}) : super(key: key);
 
+  @override
+  State<NewsPage> createState() => _NewsPageState();
+}
+
+class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -23,7 +29,10 @@ class NewsPage extends StatelessWidget {
 
   AppBar _buildAppBar() {
     return AppBar(
-      title: const Text("Tax News"),
+      title: const Text(
+        "News",
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      ),
       bottom: _buildTabBar(),
       backgroundColor: const Color(0xFF41729F),
     );
@@ -63,7 +72,7 @@ class NewsPage extends StatelessWidget {
 
   Widget _buildEverythingTabView() {
     return FutureBuilder<List<Article>>(
-        future: _newsAPI.getEverything(query: "Tax in Pakistan"),
+        future: _newsAPI.getEverything(query: "Pakistan Tax"),
         builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
           return snapshot.connectionState == ConnectionState.done
               ? snapshot.hasData
@@ -77,14 +86,19 @@ class NewsPage extends StatelessWidget {
     return ListView.builder(
       itemCount: articles.length,
       itemBuilder: (context, index) {
+        bool isPressed = false;
         Article article = articles[index];
-        return Card(
-          child: ListTile(
-            title: Text(article.title!, maxLines: 2),
-            subtitle: Text(article.description ?? "", maxLines: 3),
-            trailing: article.urlToImage == null
-                ? null
-                : Image.network(article.urlToImage!),
+        return InkWell(
+          onLongPress: () {},
+          child: Card(
+            child: ListTile(
+              title: Text(article.title!, maxLines: 2),
+              subtitle:
+                  Text(article.description ?? "", maxLines: isPressed ? 3 : 5),
+              trailing: article.urlToImage == null
+                  ? null
+                  : Image.network(article.urlToImage!),
+            ),
           ),
         );
       },
@@ -119,7 +133,7 @@ class NewsPage extends StatelessWidget {
   }
 
   Widget _buildProgress() {
-    return Center(child: CircularProgressIndicator());
+    return Center(child: Lottie.asset('assets/animations/simple_loading.json'));
   }
 
   Widget _buildError(ApiError error) {
@@ -132,9 +146,9 @@ class NewsPage extends StatelessWidget {
             Text(
               error.code ?? "",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(error.message!, textAlign: TextAlign.center),
           ],
         ),

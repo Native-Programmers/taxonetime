@@ -14,9 +14,10 @@ import 'package:taxonetime/widgets/navbar.dart';
 int? isViewed;
 
 class AuthController extends GetxController {
+  SharedPreferences? prefs;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static AuthController authInstance = Get.find();
-  Rx<ThemeData> theme = ;
+  Rx<bool> themeState = false.obs;
   late Rx<User?> firebaseUser;
   Rx<Users> userData =
       Users(dob: '', documents: [], email: '', name: '', uid: '', cnic: '').obs;
@@ -33,8 +34,14 @@ class AuthController extends GetxController {
     super.onReady();
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
+    prefs = await SharedPreferences.getInstance();
 
     ever(firebaseUser, _setInitialScreen);
+    if (prefs!.getBool('theme') == null) {
+      await prefs!.setBool('theme', false);
+    }
+
+    themeState = prefs!.getBool('theme').obs as Rx<bool>;
   }
 
   _setInitialScreen(User? user) async {
@@ -53,9 +60,7 @@ class AuthController extends GetxController {
       Get.offAll(() => const Login());
     }
   }
-  void setTheme (){
-    
-  }
+
   Future<UserCredential> signInWithFacebook() async {
     final LoginResult loginResult = await FacebookAuth.instance.login();
 
