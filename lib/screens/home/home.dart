@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
                                         child: Text(
                                           url['name'],
                                           style: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 16,
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -203,7 +203,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     Positioned(
                                       left: 5,
-                                      top: 160,
+                                      top: 170,
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -243,15 +243,18 @@ class _HomeState extends State<Home> {
                   color: Colors.transparent,
                 ),
                 Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text('Services',
-                        style: Theme.of(context).textTheme.displaySmall)),
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(left: 10),
+                  child: const Text(
+                    'Services',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
                 const Divider(
                   height: 25,
                 ),
                 SizedBox(
-                  height: 250,
+                  height: 150,
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('services')

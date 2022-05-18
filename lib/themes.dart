@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MyThemes extends ChangeNotifier {
   late ThemeData _themedata;
-
+  static bool state = false;
   static const primary = Colors.blue;
   static final primaryColor = Colors.blue.shade300;
 
@@ -11,6 +11,8 @@ class MyThemes extends ChangeNotifier {
     primaryColorDark: primaryColor,
     colorScheme: const ColorScheme.dark(primary: primary),
     dividerColor: Colors.white,
+    backgroundColor: Colors.black,
+    cardColor: Colors.black,
     fontFamily: 'Roboto',
     textTheme: const TextTheme(
       headline1: TextStyle(fontSize: 36.0),
@@ -29,6 +31,8 @@ class MyThemes extends ChangeNotifier {
     primaryColor: primaryColor,
     colorScheme: const ColorScheme.light(primary: primary),
     dividerColor: Colors.black,
+    backgroundColor: Colors.white,
+    cardColor: Colors.white,
     fontFamily: 'Roboto',
     textTheme: const TextTheme(
       headline1: TextStyle(fontSize: 36.0),
@@ -47,8 +51,10 @@ class MyThemes extends ChangeNotifier {
     } else {
       if (isActive) {
         _themedata = darkTheme;
+        state = true;
       } else {
         _themedata = lightTheme;
+        state = false;
       }
     }
   }
