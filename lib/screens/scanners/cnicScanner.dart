@@ -33,7 +33,6 @@ class Scanners extends StatefulWidget {
 
 class _ScannersState extends State<Scanners> {
   TextEditingController nameTEController = TextEditingController(),
-      emailTEController = TextEditingController(),
       cnicTEController = TextEditingController(),
       dobTEController = TextEditingController(),
       doiTEController = TextEditingController(),
@@ -52,7 +51,6 @@ class _ScannersState extends State<Scanners> {
     if (cnicModel == null) return;
     setState(() {
       _cnicModel = cnicModel;
-      emailTEController.text = widget.email as String;
       nameTEController.text = _cnicModel.cnicHolderName;
       cnicTEController.text = _cnicModel.cnicNumber;
       dobTEController.text = _cnicModel.cnicHolderDateOfBirth;
@@ -121,7 +119,7 @@ class _ScannersState extends State<Scanners> {
                                 const EdgeInsets.only(left: 15.0, bottom: 5),
                             child: TextFormField(
                               enabled: false,
-                              controller: emailTEController,
+                              initialValue: widget.email,
                               decoration: InputDecoration(
                                 hintText: widget.email as String,
                                 border: InputBorder.none,
@@ -148,7 +146,9 @@ class _ScannersState extends State<Scanners> {
               color: Colors.transparent,
             ),
             _dataField(
-                text: 'User Name', textEditingController: nameTEController),
+                text: 'User Name',
+                textEditingController: nameTEController,
+                isEnabled: false),
             const Divider(
               height: 5,
               color: Colors.transparent,
@@ -159,46 +159,188 @@ class _ScannersState extends State<Scanners> {
               color: Colors.transparent,
             ),
             _dataField(
-                text: 'Date of Birth', textEditingController: dobTEController),
+                text: 'Date of Birth',
+                textEditingController: dobTEController,
+                isEnabled: false),
             const Divider(
               height: 5,
               color: Colors.transparent,
             ),
             _dataField(
-                text: 'DD/MM/YYYY', textEditingController: doiTEController),
+                text: 'DD/MM/YYYY',
+                textEditingController: doiTEController,
+                isEnabled: false),
             const Divider(
               height: 5,
               color: Colors.transparent,
             ),
             _dataField(
-                text: 'DD/MM/YYYY', textEditingController: doeTEController),
+                text: 'DD/MM/YYYY',
+                textEditingController: doeTEController,
+                isEnabled: false),
             const Divider(
-              height: 18,
+              height: 5,
               color: Colors.transparent,
             ),
             _dataField(
-                text: 'DD/MM/YYYY', textEditingController: doeTEController),
+                text: 'DD/MM/YYYY',
+                textEditingController: doeTEController,
+                isEnabled: false),
             const Divider(
-              height: 18,
+              height: 5,
               color: Colors.transparent,
             ),
-            _dataField(
-              text: 'Contact Number',
-              textEditingController: phoneNoController,
-            ),
+            Card(
+                shadowColor: const Color(kShadowColor),
+                elevation: 5,
+                margin: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 5,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 5),
+                      child: Icon(
+                        Icons.phone,
+                        color: Color(kDarkGreenColor),
+                        size: 17,
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, top: 5, bottom: 3),
+                            child: Text(
+                              "Contact".toUpperCase(),
+                              style: const TextStyle(
+                                  color: Color(kDarkGreenColor),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 15.0, bottom: 5),
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter some text';
+                                }
+                                return null;
+                              },
+                              enabled: true,
+                              controller: phoneNoController,
+                              decoration: const InputDecoration(
+                                hintText: "Contact Number",
+                                border: InputBorder.none,
+                                isDense: true,
+                                hintStyle: TextStyle(
+                                    color: Color(kLightGreyColor),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
+                                contentPadding: EdgeInsets.all(0),
+                              ),
+                              style: const TextStyle(
+                                  color: Color(kDarkGreyColor),
+                                  fontWeight: FontWeight.bold),
+                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.phone,
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
             const Divider(
-              height: 18,
+              height: 5,
               color: Colors.transparent,
             ),
-            _dataField(
-                text: 'Address', textEditingController: addressController),
+            Card(
+                shadowColor: const Color(kShadowColor),
+                elevation: 5,
+                margin: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 5,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 5),
+                      child: Icon(
+                        Icons.location_on,
+                        color: Color(kDarkGreenColor),
+                        size: 17,
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, top: 5, bottom: 3),
+                            child: Text(
+                              "Address".toUpperCase(),
+                              style: const TextStyle(
+                                  color: Color(kDarkGreenColor),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 15.0, bottom: 5),
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter some text';
+                                }
+                                return null;
+                              },
+                              enabled: true,
+                              controller: addressController,
+                              decoration: const InputDecoration(
+                                hintText: "User Address",
+                                border: InputBorder.none,
+                                isDense: true,
+                                hintStyle: TextStyle(
+                                    color: Color(kLightGreyColor),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
+                                contentPadding: EdgeInsets.all(0),
+                              ),
+                              style: const TextStyle(
+                                  color: Color(kDarkGreyColor),
+                                  fontWeight: FontWeight.bold),
+                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.streetAddress,
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )),
             const Divider(
               height: 18,
               color: Colors.transparent,
             ),
             _getScanCNICBtn(),
             const Divider(
-              height: 18,
+              height: 10,
               color: Colors.transparent,
             ),
             ElevatedButton(
@@ -210,8 +352,7 @@ class _ScannersState extends State<Scanners> {
                 padding: const EdgeInsets.all(0.0),
               ),
               onPressed: () {
-                if (emailTEController.text.isEmpty ||
-                    nameTEController.text.isEmpty ||
+                if (nameTEController.text.isEmpty ||
                     cnicTEController.text.isEmpty ||
                     dobTEController.text.isEmpty ||
                     doiTEController.text.isEmpty ||
@@ -244,7 +385,7 @@ class _ScannersState extends State<Scanners> {
                       .doc(FirebaseAuth.instance.currentUser!.uid)
                       .set({
                     'username': nameTEController.text,
-                    'email': emailTEController.text,
+                    'email': widget.email,
                     'cnic': cnicTEController.text,
                     'dob': dobTEController.text,
                     'doe': doeTEController.text,
@@ -386,7 +527,8 @@ class _ScannersState extends State<Scanners> {
 
   Widget _dataField(
       {required String text,
-      required TextEditingController textEditingController}) {
+      required TextEditingController textEditingController,
+      required bool isEnabled}) {
     return Card(
         shadowColor: const Color(kShadowColor),
         elevation: 5,
@@ -431,7 +573,7 @@ class _ScannersState extends State<Scanners> {
                         }
                         return null;
                       },
-                      enabled: false,
+                      enabled: isEnabled,
                       controller: textEditingController,
                       decoration: InputDecoration(
                         hintText: text,
