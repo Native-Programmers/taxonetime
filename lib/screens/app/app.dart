@@ -1,25 +1,24 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:taxonetime/controller/authController.dart';
 import 'package:taxonetime/main.dart';
-import 'package:taxonetime/screens/onBoarding/onBoard.dart';
+import 'package:taxonetime/screens/onBoard/onBoardingPage.dart';
+import 'package:taxonetime/screens/wrapper/wrapper.dart';
 import 'package:taxonetime/themes.dart';
 
 class TaxOneTime extends StatelessWidget {
-  const TaxOneTime({Key? key, required this.isviewed}) : super(key: key);
-  final isviewed;
+  TaxOneTime({Key? key, required this.isviewed}) : super(key: key);
+  bool isviewed;
   @override
   Widget build(BuildContext context) {
     return ThemeProvider(
-      initTheme: AuthController.authInstance.themeState.value
-          ? MyThemes.darkTheme
-          : MyThemes.lightTheme,
+      initTheme: MyThemes.darkTheme,
       builder: (context, myTheme) {
         return GetMaterialApp(
           // turn it false before publishing
+          
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             brightness: Brightness.light,
@@ -36,7 +35,7 @@ class TaxOneTime extends StatelessWidget {
               bodyText2: TextStyle(fontSize: 10.0),
             ),
           ),
-          home: isviewed != 0 ? const OnBoard() : checkLogin(),
+          home: isViewed! ? const Wrapper() : (const OnBoardingPage()),
         );
       },
     );

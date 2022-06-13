@@ -37,7 +37,9 @@ class _ScannersState extends State<Scanners> {
       cnicTEController = TextEditingController(),
       dobTEController = TextEditingController(),
       doiTEController = TextEditingController(),
-      doeTEController = TextEditingController();
+      doeTEController = TextEditingController(),
+      addressController = TextEditingController(),
+      phoneNoController = TextEditingController();
 
   /// you're required to initialize this model class as method you used
   /// from this package will return a model of CnicModel type
@@ -145,7 +147,8 @@ class _ScannersState extends State<Scanners> {
               height: 5,
               color: Colors.transparent,
             ),
-            _dataField(text: 'Name', textEditingController: nameTEController),
+            _dataField(
+                text: 'User Name', textEditingController: nameTEController),
             const Divider(
               height: 5,
               color: Colors.transparent,
@@ -162,15 +165,33 @@ class _ScannersState extends State<Scanners> {
               color: Colors.transparent,
             ),
             _dataField(
-                text: 'Date of Card Issue',
-                textEditingController: doiTEController),
+                text: 'DD/MM/YYYY', textEditingController: doiTEController),
             const Divider(
               height: 5,
               color: Colors.transparent,
             ),
             _dataField(
-                text: 'Date of Card Expire',
-                textEditingController: doeTEController),
+                text: 'DD/MM/YYYY', textEditingController: doeTEController),
+            const Divider(
+              height: 18,
+              color: Colors.transparent,
+            ),
+            _dataField(
+                text: 'DD/MM/YYYY', textEditingController: doeTEController),
+            const Divider(
+              height: 18,
+              color: Colors.transparent,
+            ),
+            _dataField(
+              text: 'Contact Number',
+              textEditingController: phoneNoController,
+            ),
+            const Divider(
+              height: 18,
+              color: Colors.transparent,
+            ),
+            _dataField(
+                text: 'Address', textEditingController: addressController),
             const Divider(
               height: 18,
               color: Colors.transparent,
@@ -194,6 +215,8 @@ class _ScannersState extends State<Scanners> {
                     cnicTEController.text.isEmpty ||
                     dobTEController.text.isEmpty ||
                     doiTEController.text.isEmpty ||
+                    phoneNoController.text.isEmpty ||
+                    addressController.text.isEmpty ||
                     doeTEController.text.isEmpty) {
                   Get.snackbar(
                     'Error',
@@ -228,6 +251,8 @@ class _ScannersState extends State<Scanners> {
                     'doi': doiTEController.text,
                     'documents': [],
                     'deviceId': deviceId,
+                    'address': addressController.text,
+                    'contact': phoneNoController.text,
                   }).then((value) {
                     Get.back();
                     Get.back();
@@ -409,7 +434,7 @@ class _ScannersState extends State<Scanners> {
                       enabled: false,
                       controller: textEditingController,
                       decoration: InputDecoration(
-                        hintText: (text == "Name") ? "User Name" : 'DD/MM/YYYY',
+                        hintText: text,
                         border: InputBorder.none,
                         isDense: true,
                         hintStyle: const TextStyle(

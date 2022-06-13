@@ -285,6 +285,7 @@ class _LoginState extends State<Login> {
                                     Get.back();
                                     Get.back();
                                     FirebaseAuth.instance.signOut();
+                                    
                                   }).onError((error, stackTrace) {
                                     Get.back();
                                     Get.back();

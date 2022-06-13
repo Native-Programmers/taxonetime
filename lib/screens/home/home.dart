@@ -13,7 +13,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:taxonetime/colors/colors.dart';
 import 'package:taxonetime/controller/authController.dart';
-import 'package:taxonetime/models/user.dart';
+import 'package:taxonetime/models/userData.dart';
 import 'package:taxonetime/screens/chat/chatbody.dart';
 import 'package:taxonetime/screens/scanners/cnicScanner.dart';
 import 'package:taxonetime/themes.dart';
@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
               .get()
               .then((value) {
             AuthController.authInstance.userData.value =
-                Users.fromSnapshot(value);
+                UsersData.fromSnapshot(value);
             print(
                 'User Data fetched : ${AuthController.authInstance.userData.value.toString()}');
           }).onError((error, stackTrace) {
@@ -257,7 +257,7 @@ class _HomeState extends State<Home> {
                   height: 150,
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
-                        .collection('services')
+                        .collection('categories')
                         .snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.hasData &&
@@ -270,7 +270,6 @@ class _HomeState extends State<Home> {
                             itemBuilder: (context, int index) {
                               return ServiceWidget(
                                   title: data[index]['name'],
-                                  desc: data[index]['desc'],
                                   imageUrl: data[index]['imageUrl']);
                             });
                       } else {

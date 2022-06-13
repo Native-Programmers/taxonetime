@@ -1,27 +1,37 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxonetime/models/userData.dart';
 import 'package:taxonetime/models/user.dart';
-import 'package:taxonetime/screens/auth/login.dart';
+// import 'package:taxonetime/screens/auth/login.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:taxonetime/screens/onBoarding/onBoard.dart';
-import 'package:taxonetime/widgets/navbar.dart';
+// import 'package:taxonetime/screens/onBoarding/onBoard.dart';
+// import 'package:taxonetime/widgets/navbar.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
-int? isViewed;
+GoogleSignInAccount? googleAccount;
 
 class AuthController extends GetxController {
   SharedPreferences? prefs;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+
   static AuthController authInstance = Get.find();
   Rx<bool> themeState = false.obs;
+  Rx<bool> showHome = false.obs;
   late Rx<User?> firebaseUser;
-  Rx<Users> userData =
-      Users(dob: '', documents: [], email: '', name: '', uid: '', cnic: '').obs;
-  GoogleSignInAccount? googleAccount;
+  Rx<UsersData> userData = UsersData(
+          dob: '',
+          documents: [],
+          email: '',
+          name: '',
+          uid: '',
+          cnic: '',
+          address: '',
+          contact: '')
+      .obs;
   final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: <String>[
       'email',
@@ -35,30 +45,19 @@ class AuthController extends GetxController {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
     prefs = await SharedPreferences.getInstance();
-
-    ever(firebaseUser, _setInitialScreen);
-    if (prefs!.getBool('theme') == null) {
-      await prefs!.setBool('theme', false);
-    }
-
-    themeState = prefs!.getBool('theme').obs as Rx<bool>;
+    showHome = (prefs!.getBool('showHome') ?? false).obs;
+    themeState = (prefs!.getBool('theme') ?? false).obs;
   }
 
-  _setInitialScreen(User? user) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isViewed = prefs.getInt('onBoard');
-    var _isViewed = isViewed;
-    if (_isViewed != 0) {
-      Get.offAll(() => const OnBoard());
-    } else if (FirebaseAuth.instance.currentUser != null) {
-      //user is logged in
-      Get.offAll(() {
-        return const BottomNavBar();
-      });
-    } else {
-      //user is not logged in
-      Get.offAll(() => const Login());
+  Users? _userFromFirebase(auth.User? user) {
+    if (user == null) {
+      return null;
     }
+    return Users(user.uid, user.email);
+  }
+
+  Stream<Users?>? get user {
+    return _auth.authStateChanges().map(_userFromFirebase);
   }
 
   Future<UserCredential> signInWithFacebook() async {
@@ -78,7 +77,7 @@ class AuthController extends GetxController {
 
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
-
+      
       try {
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken,
@@ -129,7 +128,7 @@ class AuthController extends GetxController {
           (kIsWeb ? null : Get.back());
         });
       }).onError((error, stackTrace) {
-        Get.snackbar('Error', 'Unale to login. Please check your connection.');
+        Get.snackbar('Error', 'Unable to login. Please check your connection.');
         (kIsWeb ? null : Get.back());
       });
     } on FirebaseAuthException catch (e) {

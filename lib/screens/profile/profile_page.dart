@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taxonetime/controller/authController.dart';
-import 'package:taxonetime/models/user.dart';
+import 'package:taxonetime/models/userData.dart';
 import 'package:taxonetime/screens/profile/edit_profile_page.dart';
 import 'package:taxonetime/widgets/appbar_widget.dart';
 import 'package:taxonetime/widgets/button_widget.dart';
@@ -48,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildName(Users user) => Column(
+  Widget buildName(UsersData user) => Column(
         children: [
           Text(
             user.name,
@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
         onClicked: () {},
       );
 
-  Widget buildAbout(Users user) => Container(
+  Widget buildAbout(UsersData user) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 48),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
