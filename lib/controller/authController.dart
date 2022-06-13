@@ -1,6 +1,7 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,7 +18,6 @@ GoogleSignInAccount? googleAccount;
 class AuthController extends GetxController {
   SharedPreferences? prefs;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-
   static AuthController authInstance = Get.find();
   Rx<bool> themeState = false.obs;
   Rx<bool> showHome = false.obs;
@@ -36,6 +36,7 @@ class AuthController extends GetxController {
     scopes: <String>[
       'email',
       'https://www.googleapis.com/auth/user.emails.read',
+      'https://www.googleapis.com/auth/userinfo.profile',
     ],
   );
 
@@ -77,7 +78,7 @@ class AuthController extends GetxController {
 
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
-      
+
       try {
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken,
@@ -149,11 +150,13 @@ class AuthController extends GetxController {
     ]).then((value) => FacebookAuth.i.getUserData());
   }
 
-  void signOut() {
+  void signOut() async {
     try {
-      _auth.signOut().then((value) => Get.snackbar(
-          'Sign Out', 'User logged out successfully',
-          snackPosition: SnackPosition.BOTTOM));
+      _auth.signOut().then((value) {
+        _auth.setPersistence(Persistence.SESSION);
+        Get.snackbar('Sign Out', 'User logged out successfully',
+            snackPosition: SnackPosition.BOTTOM);
+      });
     } catch (e) {
       Get.snackbar('Error', 'Unable to logout',
           snackPosition: SnackPosition.BOTTOM);

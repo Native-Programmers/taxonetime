@@ -11,9 +11,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:taxonetime/colors/colors.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 
 String? deviceId;
 File? cnic;
@@ -59,15 +56,11 @@ class _ScannersState extends State<Scanners> {
     });
   }
 
-  Future<void> getDeviceId() async {
-    deviceId = PlatformDeviceId.getDeviceId as String;
-  }
 
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
-    getDeviceId();
   }
 
   @override

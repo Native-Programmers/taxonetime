@@ -2,11 +2,14 @@
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:taxonetime/main.dart';
 import 'package:taxonetime/screens/onBoard/onBoardingPage.dart';
 import 'package:taxonetime/screens/wrapper/wrapper.dart';
 import 'package:taxonetime/themes.dart';
+
+DateTime _lastExitTime = DateTime.now();
 
 class TaxOneTime extends StatelessWidget {
   TaxOneTime({Key? key, required this.isviewed}) : super(key: key);
@@ -18,7 +21,7 @@ class TaxOneTime extends StatelessWidget {
       builder: (context, myTheme) {
         return GetMaterialApp(
           // turn it false before publishing
-          
+
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             brightness: Brightness.light,
