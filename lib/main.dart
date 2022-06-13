@@ -7,16 +7,22 @@ import 'package:taxonetime/screens/app/app.dart';
 import 'controller/authController.dart';
 
 bool? isViewed;
-bool? themeState;
+late bool themeState;
 late SharedPreferences prefs;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
   isViewed = prefs.getBool('showHome') ?? false;
+  themeState = prefs.getBool('theme') ?? false;
+
   Get.put(AuthController());
+  AuthController.authInstance.themeState.value = themeState;
   await Firebase.initializeApp();
-  runApp(TaxOneTime(
+
+  runApp(
+    
+    TaxOneTime(
     isviewed: isViewed as bool,
   ));
 }

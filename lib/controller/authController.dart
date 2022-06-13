@@ -12,6 +12,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:taxonetime/screens/onBoarding/onBoard.dart';
 // import 'package:taxonetime/widgets/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:taxonetime/widgets/notification.dart';
 
 GoogleSignInAccount? googleAccount;
 
@@ -46,6 +47,7 @@ class AuthController extends GetxController {
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
     prefs = await SharedPreferences.getInstance();
+
     showHome = (prefs!.getBool('showHome') ?? false).obs;
     themeState = (prefs!.getBool('theme') ?? false).obs;
   }
@@ -153,13 +155,13 @@ class AuthController extends GetxController {
   void signOut() async {
     try {
       _auth.signOut().then((value) {
-        _auth.setPersistence(Persistence.SESSION);
-        Get.snackbar('Sign Out', 'User logged out successfully',
-            snackPosition: SnackPosition.BOTTOM);
+        showSnackBar(
+            error: 'Success',
+            message: 'User logged out successfully!',
+            type: 's');
       });
     } catch (e) {
-      Get.snackbar('Error', 'Unable to logout',
-          snackPosition: SnackPosition.BOTTOM);
+      showSnackBar(error: 'Error', message: 'Unable to logout!', type: 'e');
     }
   }
 }

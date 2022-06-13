@@ -1,17 +1,21 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pay/pay.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taxonetime/constant/constant.dart';
+import 'package:taxonetime/controller/authController.dart';
 import 'package:taxonetime/models/service.dart';
 import 'package:taxonetime/widgets/notification.dart';
 
+String ref = 'gs://t-o-t-5ec61.appspot.com/userDocuments';
 List docUri = [];
-List docAddress = [];
-final storageRef =
-    FirebaseStorage.instance.ref('gs://t-o-t-5ec61.appspot.com/userDocuments');
+List<String> docAddress = [];
+final storageRef = FirebaseStorage.instance.refFromURL(ref);
 
 class ServiceDetails extends StatefulWidget {
   ServiceDetails({Key? key, required this.services}) : super(key: key);
@@ -24,6 +28,13 @@ class ServiceDetails extends StatefulWidget {
 class _ServiceDetailsState extends State<ServiceDetails> {
   @override
   Widget build(BuildContext context) {
+    final _paymentItems = [
+      PaymentItem(
+        label: 'Total',
+        amount: widget.services.servicePrice.toString(),
+        status: PaymentItemStatus.final_price,
+      )
+    ];
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -44,31 +55,29 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(500),
-                      color: Colors.black,
+            ListTile(
+              leading: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(500),
+                    color: Colors.black,
+                  ),
+                  height: 50,
+                  width: 50,
+                  child: ClipOval(
+                    child: Image.network(
+                      widget.services.imageUrl,
+                      fit: BoxFit.cover,
                     ),
-                    height: 50,
-                    width: 50,
-                    child: ClipOval(
-                      child: Image.network(
-                        widget.services.imageUrl,
-                        fit: BoxFit.cover,
-                      ),
-                    )),
-                Vdivider,
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  )),
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Flexible(
                   child: Text(widget.services.serviceName,
-                      maxLines: 3,
-                      softWrap: true,
+                      overflow: TextOverflow.visible,
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
-              ],
+              ),
             ),
             divider,
             Row(
@@ -154,10 +163,13 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                           return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              ElevatedButton.icon(
-                                icon: const Icon(Icons.payment),
-                                onPressed: () {},
-                                label: const Text('Pay & Proceed'),
+                              GooglePayButton(
+                                paymentConfigurationAsset:
+                                    'assets/config/sample_config.json',
+                                paymentItems: _paymentItems,
+                                style: GooglePayButtonStyle.black,
+                                type: GooglePayButtonType.pay,
+                                onPaymentResult: onGooglePayResult,
                               ),
                             ],
                           );
@@ -188,19 +200,44 @@ class _ServiceDetailsState extends State<ServiceDetails> {
       showSnackBar(error: 'Error', message: 'No file selected', type: 'e');
       return;
     } else {
-      final path = results.files.single.path;
+      final path = results.files.single.path!;
       final name = results.files.single.name;
-      uploadFile(name, path as String);
+      uploadFile(name, path);
     }
+  }
+
+  void onGooglePayResult(paymentResult) {
+    print(paymentResult);
+    // FirebaseFirestore.instance.collection('cases').doc().set({
+    //   'serviceId': widget.services.id,
+    //   'userId': FirebaseAuth.instance.currentUser!.uid,
+    //   'userEmail': AuthController.authInstance.userData.value.email,
+    //   'userAddress': AuthController.authInstance.userData.value.address,
+    //   'userName': AuthController.authInstance.userData.value.name,
+    //   'userCnic': AuthController.authInstance.userData.value.cnic,
+    //   'userDocUrl': docUri,
+    //   'userDocAddress': docAddress,
+    //   'paymentToken': paymentResult.toString(),
+    // });
   }
 
   Future<void> uploadFile(String name, String path) async {
     File file = File(path);
     try {
-      storageRef.putFile(file).then((p0) {
+      storageRef.child(name).putFile(file).then((p0) {
         print(p0);
+        storageRef.child(name).getDownloadURL().then((value) {
+          setState(() {
+            docUri.add(value);
+            docAddress.add('$ref/$name');
+          });
+        }).onError((error, stackTrace) {
+          showSnackBar(
+              error: 'Error',
+              message: 'Something happened while fetching Url',
+              type: 'e');
+        });
       });
-      setState(() {});
     } on FirebaseException catch (e) {
       print('Error while uploading ${e.toString()}');
     }

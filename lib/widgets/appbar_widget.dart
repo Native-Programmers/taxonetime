@@ -3,12 +3,13 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxonetime/controller/authController.dart';
 import 'package:taxonetime/themes.dart';
 
 AppBar buildAppBar(BuildContext context) {
-  final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+  final isDarkMode = AuthController.authInstance.themeState as bool;
   const icon = CupertinoIcons.moon_stars;
 
   return AppBar(
@@ -22,7 +23,9 @@ AppBar buildAppBar(BuildContext context) {
             final theme = isDarkMode ? MyThemes.lightTheme : MyThemes.darkTheme;
             AuthController.authInstance.themeState.value = isDarkMode;
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setBool('theme', isDarkMode);
+            await prefs.setBool('theme', isDarkMode).then((value) {
+              Restart.restartApp();
+            });
 
             ThemeSwitcher.of(context).changeTheme(theme: theme);
           },

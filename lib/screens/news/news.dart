@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:news_api_flutter_package/model/article.dart';
@@ -60,7 +62,8 @@ class _NewsPageState extends State<NewsPage> {
 
   Widget _buildTopHeadlinesTabView() {
     return FutureBuilder<List<Article>>(
-        future: _newsAPI.getTopHeadlines(category: 'business', country: ''),
+        future:
+            _newsAPI.getTopHeadlines(category: 'business', query: "Pakistan"),
         builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
           return snapshot.connectionState == ConnectionState.done
               ? snapshot.hasData

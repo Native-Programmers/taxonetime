@@ -10,13 +10,13 @@ import 'package:taxonetime/constant/constant.dart';
 import 'package:taxonetime/widgets/notification.dart';
 
 class UserCard extends StatefulWidget {
+  const UserCard({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() {
-    return UserCardState();
-  }
+  State<UserCard> createState() => _UserCardState();
 }
 
-class UserCardState extends State<UserCard> {
+class _UserCardState extends State<UserCard> {
   String cardNumber = '';
   String expiryDate = '';
   String cardHolderName = '';
@@ -29,7 +29,14 @@ class UserCardState extends State<UserCard> {
 
   @override
   void initState() {
-    getData();
+    getData().then((value) {
+      setState(() {
+        cardNumber = value['number'];
+        expiryDate = value['expiry'];
+        cardHolderName = value['name'];
+        cvvCode = value['cvv'];
+      });
+    });
     border = OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.grey.withOpacity(0.7),
@@ -183,21 +190,36 @@ class UserCardState extends State<UserCard> {
                                       ),
                                     ),
                                   );
-                                  await storage.write(
-                                      key: 'name', value: cardHolderName);
-                                  await storage.write(
-                                      key: 'number', value: cardNumber);
-                                  await storage.write(
-                                      key: 'expiry', value: expiryDate);
                                   await storage
-                                      .write(key: 'cvv', value: cvvCode)
+                                      .write(key: 'name', value: cardHolderName)
                                       .then((value) {
-                                    Get.back();
-                                    showSnackBar(
-                                        error: 'Success',
-                                        message:
-                                            'Information saved successfully',
-                                        type: 's');
+                                    storage
+                                        .write(key: 'number', value: cardNumber)
+                                        .then((value) {
+                                      storage
+                                          .write(
+                                              key: 'expiry', value: expiryDate)
+                                          .then((value) {
+                                        storage
+                                            .write(key: 'cvv', value: cvvCode)
+                                            .then((value) {
+                                          Get.back();
+                                          showSnackBar(
+                                              error: 'Success',
+                                              message:
+                                                  'Information saved successfully',
+                                              type: 's');
+                                        }).onError((error, stackTrace) {
+                                          print('Error: $error');
+                                        });
+                                      }).onError((error, stackTrace) {
+                                        print('Error: $error');
+                                      });
+                                    }).onError((error, stackTrace) {
+                                      print('Error: $error');
+                                    });
+                                  }).onError((error, stackTrace) {
+                                    print('Error: $error');
                                   });
                                 } else {
                                   showSnackBar(
@@ -229,13 +251,19 @@ class UserCardState extends State<UserCard> {
     );
   }
 
-  Future<void> getData() async {
-    setState(() async {
-      cardNumber = await storage.read(key: 'number') ?? '';
-      expiryDate = await storage.read(key: 'expiry') ?? '';
-      cardHolderName = await storage.read(key: 'name') ?? '';
-      cvvCode = await storage.read(key: 'cvv') ?? '';
+  Future<Map<String, dynamic>> getData() async {
+    cardNumber = await storage.read(key: 'number') ?? '';
+    expiryDate = await storage.read(key: 'expiry') ?? '';
+    cardHolderName = await storage.read(key: 'name') ?? '';
+    cvvCode = await storage.read(key: 'cvv') ?? '';
+    Map<String, dynamic> data = ({
+      'number': cardNumber,
+      'name': cardHolderName,
+      'cvv': cvvCode,
+      'expiry': expiryDate,
     });
+    print(data);
+    return data;
   }
 
   void onCreditCardModelChange(CreditCardModel? creditCardModel) {
