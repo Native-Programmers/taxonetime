@@ -55,6 +55,7 @@ dependencies:
   bubble: ^1.2.1
   pay: ^1.0.10
   restart_app: ^1.1.0
+  provider: ^6.0.3
   
 dev_dependencies:
   flutter_test:

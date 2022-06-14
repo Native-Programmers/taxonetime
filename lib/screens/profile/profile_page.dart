@@ -64,9 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildUpgradeButton() => ButtonWidget(
         text: 'Upgrade To PRO',
-        onClicked: () {
-          
-        },
+        onClicked: () {},
       );
 
   Widget buildAbout(UsersData user) => Container(
@@ -80,7 +78,12 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 16),
             Text(
-              user.cnic,
+              'CNIC: ${user.cnic}',
+              style: const TextStyle(fontSize: 16, height: 1.4),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Address: ${user.address}',
               style: const TextStyle(fontSize: 16, height: 1.4),
             ),
           ],

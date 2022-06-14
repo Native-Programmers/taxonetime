@@ -12,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:taxonetime/colors/colors.dart';
 
-String? deviceId;
 File? cnic;
 String? Uri;
 File? _photo;
@@ -55,7 +54,6 @@ class _ScannersState extends State<Scanners> {
       doeTEController.text = _cnicModel.cnicExpiryDate;
     });
   }
-
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -384,7 +382,6 @@ class _ScannersState extends State<Scanners> {
                     'doe': doeTEController.text,
                     'doi': doiTEController.text,
                     'documents': [],
-                    'deviceId': deviceId,
                     'address': addressController.text,
                     'contact': phoneNoController.text,
                   }).then((value) {

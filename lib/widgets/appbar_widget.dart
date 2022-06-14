@@ -9,7 +9,7 @@ import 'package:taxonetime/controller/authController.dart';
 import 'package:taxonetime/themes.dart';
 
 AppBar buildAppBar(BuildContext context) {
-  final isDarkMode = AuthController.authInstance.themeState as bool;
+  final isDarkMode = AuthController.authInstance.themeState.value;
   const icon = CupertinoIcons.moon_stars;
 
   return AppBar(
@@ -20,11 +20,13 @@ AppBar buildAppBar(BuildContext context) {
         builder: (context) => IconButton(
           icon: const Icon(icon),
           onPressed: () async {
-            final theme = isDarkMode ? MyThemes.lightTheme : MyThemes.darkTheme;
+            final theme = AuthController.authInstance.themeState.value
+                ? MyThemes.lightTheme
+                : MyThemes.darkTheme;
             AuthController.authInstance.themeState.value = isDarkMode;
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setBool('theme', isDarkMode).then((value) {
-              Restart.restartApp();
+              // Restart.restartApp();
             });
 
             ThemeSwitcher.of(context).changeTheme(theme: theme);

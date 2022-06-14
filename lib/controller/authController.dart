@@ -20,7 +20,7 @@ class AuthController extends GetxController {
   SharedPreferences? prefs;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static AuthController authInstance = Get.find();
-  Rx<bool> themeState = false.obs;
+  RxBool themeState = false.obs;
   Rx<bool> showHome = false.obs;
   late Rx<User?> firebaseUser;
   Rx<UsersData> userData = UsersData(
