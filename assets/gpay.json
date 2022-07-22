@@ -10,7 +10,7 @@
           "type": "PAYMENT_GATEWAY",
           "parameters": {
             "gateway": "example",
-            "gatewayMerchantId": "gatewayMerchantId"
+            "gatewayMerchantId": "BCR2DN4TYCKIXRSE"
           }
         },
         "parameters": {

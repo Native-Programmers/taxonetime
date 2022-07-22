@@ -79,12 +79,12 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/
     - assets/dialog_flow_auth.json
     - assets/images/
     - assets/icons/
     - assets/videos/
     - assets/animations/
-    - assets/config/
   fonts:
     - family: Roboto
       fonts:

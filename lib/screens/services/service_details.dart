@@ -30,7 +30,7 @@ class _ServiceDetailsState extends State<ServiceDetails> {
   Widget build(BuildContext context) {
     final _paymentItems = [
       PaymentItem(
-        label: 'Total',
+        label: widget.services.serviceName,
         amount: widget.services.servicePrice.toString(),
         status: PaymentItemStatus.final_price,
       )
@@ -160,18 +160,23 @@ class _ServiceDetailsState extends State<ServiceDetails> {
                     showModalBottomSheet(
                         context: context,
                         builder: (_) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              GooglePayButton(
-                                paymentConfigurationAsset:
-                                    'assets/config/sample_config.json',
-                                paymentItems: _paymentItems,
-                                style: GooglePayButtonStyle.black,
-                                type: GooglePayButtonType.pay,
-                                onPaymentResult: onGooglePayResult,
-                              ),
-                            ],
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                GooglePayButton(
+                                  height: 70,
+                                  width: 200,
+                                  
+                                  paymentConfigurationAsset: 'gpay.json',
+                                  paymentItems: _paymentItems,
+                                  style: GooglePayButtonStyle.black,
+                                  type: GooglePayButtonType.buy,
+                                  onPaymentResult: onGooglePayResult,
+                                ),
+                              ],
+                            ),
                           );
                         });
                   } else {
@@ -208,17 +213,17 @@ class _ServiceDetailsState extends State<ServiceDetails> {
 
   void onGooglePayResult(paymentResult) {
     print(paymentResult);
-    // FirebaseFirestore.instance.collection('cases').doc().set({
-    //   'serviceId': widget.services.id,
-    //   'userId': FirebaseAuth.instance.currentUser!.uid,
-    //   'userEmail': AuthController.authInstance.userData.value.email,
-    //   'userAddress': AuthController.authInstance.userData.value.address,
-    //   'userName': AuthController.authInstance.userData.value.name,
-    //   'userCnic': AuthController.authInstance.userData.value.cnic,
-    //   'userDocUrl': docUri,
-    //   'userDocAddress': docAddress,
-    //   'paymentToken': paymentResult.toString(),
-    // });
+    FirebaseFirestore.instance.collection('cases').doc().set({
+      'serviceId': widget.services.id,
+      'userId': FirebaseAuth.instance.currentUser!.uid,
+      'userEmail': AuthController.authInstance.userData.value.email,
+      'userAddress': AuthController.authInstance.userData.value.address,
+      'userName': AuthController.authInstance.userData.value.name,
+      'userCnic': AuthController.authInstance.userData.value.cnic,
+      'userDocUrl': docUri,
+      'userDocAddress': docAddress,
+      'paymentToken': paymentResult.toString(),
+    });
   }
 
   Future<void> uploadFile(String name, String path) async {
